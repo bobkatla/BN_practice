@@ -19,6 +19,7 @@ import time
 
 
 def run_main() -> None:
+    print("DOING SAA FIXED ORDER ADJUSTMENT")
     hh_marg = pd.read_csv(data_dir / "hh_marginals_ipu.csv", header=[0, 1])
     hh_marg = hh_marg.drop(
         columns=hh_marg.columns[hh_marg.columns.get_level_values(0) == "sample_geog"][0]
@@ -49,15 +50,14 @@ def run_main() -> None:
     chosen_hhs = []
     err_rm_hh = []
     while n_run_time < MAX_RUN_TIME and n_removed_err_hh > 0:
-        # randomly shuffle for each adjustment
-        random.shuffle(order_adjustment)
+        # The order is the same everytime
         err_rm_hh.append(n_removed_err_hh)
         print(
             f"For run {n_run_time}, order is: {order_adjustment}, aim for {n_removed_err_hh} HHs"
         )
         saa = SAA(hh_marg, considered_atts, order_adjustment, pool)
         ###
-        final_syn_pop = saa.run(extra_name=f"_{n_run_time}")
+        final_syn_pop = saa.run(extra_name=f"_fixed{n_run_time}")
         ###
         # error check
         marg_from_kept_hh = convert_full_to_marg_count(final_syn_pop, [zone_field])
@@ -99,7 +99,7 @@ def run_main() -> None:
     print(f"Error hh rm are: {err_rm_hh}")
 
     # output
-    final_syn_hh.to_csv(output_dir / "SAA_HH_only_looped.csv")
+    final_syn_hh.to_csv(output_dir / "SAA_HH_fixed_ad.csv")
 
 
 if __name__ == "__main__":

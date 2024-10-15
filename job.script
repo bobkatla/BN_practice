@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=run_hh_seq_loop
+#SBATCH --job-name=SAA_hh_fixed
 #SBATCH --partition=comp
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --time=160:00:00
-#SBATCH --output=run_hh_seq_loop.out
+#SBATCH --output=SAA_hh_fixed.out
 
 source .venv/bin/activate
 
